@@ -7,53 +7,54 @@ public class JackBehavior : MonoBehaviour {
 
 
     // How many units left and right it should patrol 
-    public int patrolBoundLeft; 
-    public int patrolBoundRight;
+  
 
-    private Transform[] points;
-    private int destPoint = 0;
+    public List<WayPoint> _patrolPoints;
+    private int _currentPatrolIndex = 0;
     private NavMeshAgent agent;
     // Use this for initialization
 
-    public  void GoToNextPoint()
-    {
-
-        agent.destination = points[destPoint].position;
-
-        // Choose the next point in the array as the destination,
-        // cycling to the start if necessary.
-        destPoint = (destPoint + 1) % points.Length;
-
-    }
+        
 
 
     void Start () {
 
-        Vector3 leftBound =  (this.transform.position - new Vector3(0, 0 , patrolBoundLeft));
-        Vector3 rightBound = (this.transform.position + new Vector3(0, 0, patrolBoundRight));
-
-        GameObject left = new GameObject();
-        left.transform.position = leftBound;
-        GameObject right = new GameObject();
-        right.transform.position = rightBound;
+    //    Vector3 leftBound =  (this.transform.position - new Vector3(0, 0 , patrolBoundLeft));
+      //  Vector3 rightBound = (this.transform.position + new Vector3(0, 0, patrolBoundRight));
+        
+        agent = this.GetComponent<NavMeshAgent>();
 
 
-        points = new[]{ left.transform, right.transform }; 
+        _currentPatrolIndex = 0;
+        SetDestination();
 
+    }
 
+    private void SetDestination()
+    {
+        if (_patrolPoints != null)
+        {
+            Vector3 targetVector = _patrolPoints[_currentPatrolIndex].transform.position;
+            agent.destination = targetVector;
+         
+        }
+    }
+    private void ChangePatrolPoint()
+    {
+       
+        _currentPatrolIndex = (_currentPatrolIndex + 1) % _patrolPoints.Count;
+     
+    }
 
-        agent = GetComponent<NavMeshAgent>();
+    // Update is called once per frame
+    void Update () {
 
-        GoToNextPoint();
+        if (!agent.pathPending && agent.remainingDistance <= 1.0f) 
+        {
 
-	}
-	
-   
-
-	// Update is called once per frame
-	void Update () {
-
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
-            GoToNextPoint();
+            ChangePatrolPoint();
+            SetDestination();
+        }
+            
     }
 }
