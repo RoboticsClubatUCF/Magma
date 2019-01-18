@@ -14,13 +14,12 @@ public class JackBehavior : MonoBehaviour {
     private NavMeshAgent agent;
     // Use this for initialization
 
-        
 
+    private int health = 10;
 
     void Start () {
 
-    //    Vector3 leftBound =  (this.transform.position - new Vector3(0, 0 , patrolBoundLeft));
-      //  Vector3 rightBound = (this.transform.position + new Vector3(0, 0, patrolBoundRight));
+    
         
         agent = this.GetComponent<NavMeshAgent>();
 
