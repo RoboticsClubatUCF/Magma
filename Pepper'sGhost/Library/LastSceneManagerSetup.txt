@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/combined.unity
+- path: Assets/Hologram Pyramid/Scene/Demo.unity
   isLoaded: 1
   isActive: 1
